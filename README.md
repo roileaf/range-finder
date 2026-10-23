@@ -21,6 +21,7 @@ Works on square grids (per-square bands) and hex/gridless scenes (rings). Area s
 ## Supported systems
 
 - **PF2e** — strikes, weapons, spells, skill actions and feat actions with range increments, reach, volley and per-use boosts; sheets, PF2e HUD, PF2e Unified Spellbook and Token HUD.
+  Any other action or feat (NPC abilities included) gets its range from its description: auras, emanations, cones, lines and aimed bursts, "within N feet", "a range of N feet", "within its reach" and targeted "adjacent" wordings. Several distances show as nested bands.
 - **SF2e** — as PF2e, plus area and automatic weapons' area labels.
 - **D&D 5e (6.x)** — weapons, spells and feature activities: normal / long range (`Disadv.`), reach, touch and template ranges; character and NPC sheets.
 - **Daggerheart** — weapon attacks, adversary attacks and domain card / feature actions as nested Melee → Very Far bands from the scene's range settings, measured like the system's own range check.

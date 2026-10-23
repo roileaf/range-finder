@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Ranges for every action (PF2e / SF2e):** actions and feats without a built-in range, NPC abilities included, now read it from their description: auras, emanations, cones, lines, bursts, "within 20 feet", "a range of 60 feet", "within its reach" (Attack of Opportunity) and adjacent creatures ("an adjacent creature", "all creatures adjacent to the skink"). The 📏 shows on NPC sheet abilities, the character Actions tab and the PF2e HUD actions sidebar, and the Token HUD list has a new **Actions** group.
+
 ## 1.0.1
 
 - **Who can share:** a new world setting limits Shift+click sharing to Trusted Players or Assistant GMs (default: all players). GMs can always share, and shares from users who aren't allowed are ignored by everyone else.

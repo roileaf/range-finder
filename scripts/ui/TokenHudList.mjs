@@ -2,7 +2,7 @@
 import { rangeLabel as deriveLabel, showsButton } from '../core/spec.mjs';
 
 export const HUD_HOOK = 'rangeFinderTokenHud';
-export const GROUPS = ['attacks', 'spells', 'skills', 'other'];
+export const GROUPS = ['attacks', 'spells', 'actions', 'skills', 'other'];
 const LIST_ID = 'range-finder-hud-list';
 
 export class TokenHudList {

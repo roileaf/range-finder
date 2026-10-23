@@ -4,7 +4,8 @@ import { MAX_INCREMENTS, incrementBands, makeSpec, noneSpec, singleBand } from '
 import { adjustIncrement, adjustReach, adjustSpell, boostBands, grantedThrown, perUseBoosts } from './pf2e-modifiers.mjs';
 import { pf2eRows } from './pf2e-rows.mjs';
 import { skillActionItems, skillEntry, skillItem, skillSpec } from './pf2e-skills.mjs';
-import { sluggify, traitNumber, traitsOf } from './pf2e-util.mjs';
+import { itemTextRanges } from './pf2e-text.mjs';
+import { baseReach, sluggify, traitNumber, traitsOf } from './pf2e-util.mjs';
 import { itemsOf } from './util.mjs';
 
 /** SF2e area weapons: "Area burst 10 ft", "Auto-fire cone 15 ft". Mirrors CharacterPF2e#prepareAreaAttack. */
@@ -108,6 +109,28 @@ function strikeItem(actor, actionIndex, item) {
   return actions.find(action => action?.item && action.item.id === item.id)?.item ?? item;
 }
 
+/** Most distances one action shows; extra mentions are usually side effects (a later burst, a jump). */
+const MAX_TEXT_BANDS = 3;
+
+/** Actions and feats without a curated entry: the ranges their description names, nearest first as bands. */
+export function actionTextSpec(actor, item) {
+  const name = item?.name ?? '';
+  const bands = [];
+  for (const rule of itemTextRanges(item).slice(0, MAX_TEXT_BANDS)) {
+    if (rule.kind === 'feet') bands.push({ max: rule.feet, tone: 'base', label: rule.label });
+    else if (rule.kind === 'adjacent') bands.push({ max: 5, tone: 'reach', label: 'Adjacent' });
+    else if (rule.kind === 'reach') {
+      const reach = actor?.getReach?.({ action: 'attack' }) || baseReach(actor);
+      bands.push({ max: reach, tone: 'reach', label: `Reach ${reach} ft` });
+    }
+  }
+  if (!bands.length) return noneSpec(null, name);
+  bands.sort((a, b) => a.max - b.max);
+  const distinct = bands.filter((band, i) => i === 0 || band.max !== bands[i - 1].max);
+  const kind = distinct.every(band => band.tone === 'reach') ? 'reach' : 'radius';
+  return makeSpec({ kind, bands: distinct.map((band, i) => ({ ...band, min: i ? distinct[i - 1].max : 0, penalty: 0 })), itemName: name });
+}
+
 export function specFor({ actor, item, actionIndex = null }) {
   if (actionIndex !== null && actionIndex !== undefined) item = strikeItem(actor, actionIndex, item);
   if (!item) return noneSpec();
@@ -115,6 +138,7 @@ export function specFor({ actor, item, actionIndex = null }) {
   if (item.type === 'weapon' || item.type === 'melee') return weaponSpec(actor, item);
   const entry = skillEntry(item);
   if (entry) return skillSpec(actor, entry, item.name ?? entry.name);
+  if (item.type === 'action' || item.type === 'feat') return actionTextSpec(actor, item);
   return noneSpec(null, item.name ?? '');
 }
 
@@ -146,7 +170,7 @@ export function resolveItem(actor, uuid) {
   return skillItem(uuid);
 }
 
-/** Token HUD list: strikes, every spellcasting entry's spells (incl. scrolls/wands/staves), other weapons, skill actions. */
+/** Token HUD list: strikes, every spellcasting entry's spells (incl. scrolls/wands/staves), other weapons, actions/feats whose text names a range, skill actions. */
 export function listItems(actor) {
   const out = [];
   const strikeIds = new Set();
@@ -166,7 +190,12 @@ export function listItems(actor) {
   for (const item of itemsOf(actor)) {
     if ((item?.type === 'weapon' || item?.type === 'melee') && !strikeIds.has(item.id)) out.push({ item, actionIndex: null, group: 'other' });
   }
-  for (const item of skillActionItems(actor)) out.push({ item, actionIndex: null, group: 'skills' });
+  const skills = skillActionItems(actor);
+  const skillIds = new Set(skills.map(item => item?.id).filter(Boolean));
+  for (const item of itemsOf(actor)) {
+    if ((item?.type === 'action' || item?.type === 'feat') && !skillIds.has(item.id) && itemTextRanges(item).length) out.push({ item, actionIndex: null, group: 'actions' });
+  }
+  for (const item of skills) out.push({ item, actionIndex: null, group: 'skills' });
   return out;
 }
 

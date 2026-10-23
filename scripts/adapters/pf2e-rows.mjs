@@ -131,6 +131,16 @@ export const pf2eRows = [
     host: el => el.querySelector(':scope > .button-group') ?? controlsHost(el)
   },
   {
+    // NPC sheet abilities (strikes carry data-action-index and are handled above).
+    hooks: ['renderNPCSheetPF2e'],
+    selector: 'li.item.action[data-item-id]:not([data-action-index])',
+    resolve: (el, app) => {
+      const item = itemOf(app.actor, el.dataset.itemId);
+      return item && (item.type === 'action' || item.type === 'feat') ? { actor: app.actor, item, actionIndex: null } : null;
+    },
+    host: el => el.querySelector(':scope > .controls') ?? controlsHost(el)
+  },
+  {
     hooks: ['renderActionsSidebarPF2eHUD'],
     selector: '.item.action[data-item-id]',
     resolve: (el, app) => {

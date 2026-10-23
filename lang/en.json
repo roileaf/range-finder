@@ -10,6 +10,7 @@
       "Groups": {
         "attacks": "Attacks",
         "spells": "Spells",
+        "actions": "Actions",
         "skills": "Skill actions",
         "other": "Other"
       }
