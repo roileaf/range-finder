@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.0.2
 
 - **Ranges for every action (PF2e / SF2e):** actions and feats without a built-in range, NPC abilities included, now read it from their description: auras, emanations, cones, lines, bursts, "within 20 feet", "a range of 60 feet", "within its reach" (Attack of Opportunity) and adjacent creatures ("an adjacent creature", "all creatures adjacent to the skink"). The 📏 shows on NPC sheet abilities, the character Actions tab and the PF2e HUD actions sidebar, and the Token HUD list has a new **Actions** group.
 
