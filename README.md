@@ -1,3 +1,14 @@
+[![Latest Version](https://img.shields.io/github/v/release/roi007leaf/range-finder?display_name=tag&sort=semver&label=Latest%20Version)](https://github.com/roi007leaf/range-finder/releases/latest)
+
+[![GitHub all releases](https://img.shields.io/github/downloads/roi007leaf/range-finder/total)](https://github.com/roi007leaf/range-finder/releases)
+
+[![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Frange-finder)](https://forge-vtt.com/bazaar)
+
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/roileaf)
+[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/roileaf)
+
+
 # Range Finder
 
 See an item's, attack's, spell's or skill action's range right on the canvas — in any system.
