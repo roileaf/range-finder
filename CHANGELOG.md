@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## 1.0.3
 
-- **No more stuck sheets:** while a pinned range keeps a window faded (and click-through), a *Range shown · Esc or click to clear* chip sits at the top of the screen; click it to clear the range and bring the window back. The first time a window fades, a one-time notification also explains it. Esc still works as before.
+- **No more stuck sheets:** while a pinned range keeps a window faded (and click-through), a *Range shown · press Esc or click to clear* chip sits at the top of the screen; click it to clear the range and bring the window back. The first time a window fades, a one-time notification also explains it. Esc still works as before.
 
 ## 1.0.2
 
