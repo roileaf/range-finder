@@ -10,11 +10,33 @@
 .range-finder-btn.is-shared { color: var(--range-finder-user, #2ec4b6); box-shadow: 0 0 0 1px currentColor, 0 0 8px currentColor; }
 .range-finder-btn.is-disabled { opacity: .4; cursor: help; }
 .range-finder-ghostable { transition: opacity .15s ease; }
-/* Faded windows are fully click-through (children too); the J keybinding brings them back. */
+/* Faded windows are fully click-through (children too); Esc or the clear chip brings them back. */
 .range-finder-ghost, .range-finder-ghost * { pointer-events: none !important; }
 .range-finder-ghost { opacity: .1 !important; }
+/* Shown while a pinned range keeps a window faded: the visible way back. Colors, border and hover come from
+   Foundry's own `ui-control button` styles (and its light/dark theme); this only sizes it as a labelled pill. */
+.range-finder-chip {
+  width: auto; height: auto; min-height: var(--control-size, 32px); margin: 8px auto 0;
+  padding: 0 .75rem; gap: .5rem; flex: none; align-self: center;
+  font-family: var(--font-sans); font-size: var(--font-size-14, 14px); line-height: 1.2; white-space: nowrap;
+  box-shadow: 0 0 10px var(--color-shadow-dark, rgb(0 0 0 / 60%));
+  pointer-events: all; animation: range-finder-chip-in .2s ease-out;
+}
+.range-finder-chip.is-floating { position: fixed; top: 8px; left: 50%; margin: 0; transform: translateX(-50%); z-index: var(--z-index-ui, 60); }
+.range-finder-chip .range-finder-chip-icon { color: #2ec4b6; }
+.range-finder-chip .range-finder-chip-close { opacity: .7; font-size: .9em; transition: opacity .15s; }
+.range-finder-chip:hover .range-finder-chip-close { opacity: 1; }
+.range-finder-chip:hover .range-finder-chip-icon { color: inherit; }
+.range-finder-chip kbd {
+  display: inline-block; margin: 0 .2em; padding: 0 .4em; min-width: 1.6em; text-align: center;
+  border: 1px solid currentColor; border-bottom-width: 2px; border-radius: 3px;
+  font-family: inherit; font-size: .8em; font-weight: 600; line-height: 1.4; opacity: .9;
+}
+.range-finder-chip:focus-visible { outline: 2px solid #2ec4b6; outline-offset: 2px; }
+@keyframes range-finder-chip-in { from { opacity: 0; translate: 0 -6px; } to { opacity: 1; translate: 0 0; } }
 @media (prefers-reduced-motion: reduce) {
   .range-finder-btn, .range-finder-ghostable { transition: none; }
+  .range-finder-chip { animation: none; }
 }
 /* pf2e-hud persistent shortcut tiles have no controls area: pin the button to the tile's top-right corner.
    The tile styles every child absolute with pointer-events: none, so re-enable pointer events. */

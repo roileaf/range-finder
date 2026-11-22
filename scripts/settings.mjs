@@ -15,7 +15,9 @@ export const SETTINGS = {
   // Foundry user roles: 1 Player, 2 Trusted Player, 3 Assistant GM.
   shareRole: { scope: 'world', type: Number, default: 1, choices: choices('shareRole', [1, 2, 3]) },
   badgesCombatOnly: { scope: 'world', type: Boolean, default: false },
-  tokenHudButton: { scope: 'client', type: Boolean, default: true }
+  tokenHudButton: { scope: 'client', type: Boolean, default: true },
+  // Hidden: the one-time "press Esc to bring the window back" notification has been shown on this client.
+  fadeHintShown: { scope: 'client', type: Boolean, default: false, config: false }
 };
 
 // Foundry localizes setting names, hints and choices itself, so the default localize is the identity.

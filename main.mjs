@@ -3,6 +3,7 @@ import { RangeOverlay } from './scripts/canvas/RangeOverlay.mjs';
 import { TargetBadges } from './scripts/canvas/TargetBadges.mjs';
 import { makeText, sceneGeometry, sceneUnits } from './scripts/canvas/geometry.mjs';
 import { MODULE_ID, canShare, readSettings, registerSettings } from './scripts/settings.mjs';
+import { ClearChip } from './scripts/ui/ClearChip.mjs';
 import { Ghost } from './scripts/ui/Ghost.mjs';
 import { headerButtonV1, headerControlV2 } from './scripts/ui/HeaderButton.mjs';
 import { PinManager } from './scripts/ui/PinManager.mjs';
@@ -10,15 +11,15 @@ import { TokenHudList } from './scripts/ui/TokenHudList.mjs';
 import { Triggers } from './scripts/ui/Triggers.mjs';
 
 const SOCKET = `module.${MODULE_ID}`;
-let adapter, pins, ghost, triggers, overlay, badges, hudList;
+let adapter, pins, ghost, triggers, overlay, badges, hudList, chip;
 let frame = null;
 const dragging = new Map();
 const report = error => console.error('Range Finder |', error);
 
-/** Display name of the first key bound to "Preview hovered range" (e.g. "Alt"), or null when unbound. */
-function previewKey() {
+/** Display name of the first key bound to one of this module's actions (e.g. "Alt", "Escape"), or null when unbound. */
+function boundKey(action) {
   try {
-    const binding = game.keybindings.get(MODULE_ID, 'preview')?.[0];
+    const binding = game.keybindings.get(MODULE_ID, action)?.[0];
     if (!binding?.key) return null;
     const KM = foundry.helpers?.interaction?.KeyboardManager;
     const keys = [...(binding.modifiers ?? []), String(KM?.getKeycodeDisplayString?.(binding.key) ?? binding.key).replace(/(Left|Right)$/, '')];
@@ -27,6 +28,20 @@ function previewKey() {
     report(error);
     return null;
   }
+}
+const previewKey = () => boundKey('preview');
+
+/** Chip while a pin keeps a window faded; the first time ever, also a notification naming the Clear key. */
+function onGhostChange() {
+  const faded = Boolean(ghost?.hasPinnedFade());
+  chip?.update(faded);
+  if (!faded) return;
+  try {
+    if (game.settings.get(MODULE_ID, 'fadeHintShown')) return;
+    game.settings.set(MODULE_ID, 'fadeHintShown', true);
+    const key = boundKey('clearAll');
+    ui.notifications.info(key ? game.i18n.localize('RANGE_FINDER.Notify.FadeHint').replace('{key}', key) : game.i18n.localize('RANGE_FINDER.Notify.FadeHintNoKey'));
+  } catch (error) { report(error); }
 }
 
 const userColor = id => {
@@ -160,7 +175,8 @@ Hooks.once('setup', () => {
 });
 
 Hooks.once('ready', () => {
-  ghost = new Ghost({ mode: () => readSettings().ghostMode, appFor: appForElement });
+  chip = new ClearChip({ onClear: clearLocal, localize: key => game.i18n.localize(key), clearKey: () => boundKey('clearAll') });
+  ghost = new Ghost({ mode: () => readSettings().ghostMode, appFor: appForElement, onChange: onGhostChange });
   pins = new PinManager({
     userId: game.user.id,
     build,

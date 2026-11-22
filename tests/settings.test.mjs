@@ -18,14 +18,14 @@ test('registers every setting with the spec defaults and scopes', () => {
   const expected = {
     bandStyle: ['client', 'both'], bandOpacity: ['client', 1], showLabels: ['client', true], badgeScale: ['client', 1],
     palette: ['client', 'default'], dimBehindWalls: ['client', false], ghostMode: ['client', 'fade'],
-    ghostPersistentHud: ['client', false], allowSharing: ['world', true], shareRole: ['world', 1], badgesCombatOnly: ['world', false], tokenHudButton: ['client', true]
+    ghostPersistentHud: ['client', false], allowSharing: ['world', true], shareRole: ['world', 1], badgesCombatOnly: ['world', false], tokenHudButton: ['client', true], fadeHintShown: ['client', false]
   };
   assert.deepEqual([...settings.registered.keys()].sort(), Object.keys(expected).sort());
   for (const [key, [scope, value]] of Object.entries(expected)) {
     const data = settings.registered.get(key);
     assert.equal(data.scope, scope, key);
     assert.equal(data.default, value, key);
-    assert.equal(data.config, true, key);
+    assert.equal(data.config, key !== 'fadeHintShown', key);
     assert.equal(data.onChange, onChange, key);
     assert.equal(data.name, `RANGE_FINDER.Settings.${key}.Name`);
   }

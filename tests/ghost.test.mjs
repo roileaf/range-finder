@@ -140,3 +140,29 @@ test('hold/release accept a list of elements (HUD sidebar + bar)', () => {
   assert.ok(!a.classList.contains(GHOST_CLASS) && !b.classList.contains(GHOST_CLASS));
   assert.ok(!ghost.isGhosted(a) && !ghost.isGhosted(b));
 });
+
+test('onChange runs on hold/release; hasPinnedFade ignores previews and minimize mode', () => {
+  let calls = 0;
+  const el = element(), ghost = new Ghost({ doc: doc(), onChange: () => { calls++; } });
+  ghost.hold(el, { sticky: false });
+  assert.equal(ghost.hasPinnedFade(), false, 'an Alt preview alone shows no chip');
+  ghost.hold(el, { sticky: true });
+  assert.equal(ghost.hasPinnedFade(), true);
+  ghost.release(el, { sticky: true });
+  assert.equal(ghost.hasPinnedFade(), false);
+  ghost.releaseAll();
+  assert.equal(calls, 4);
+  const min = new Ghost({ doc: doc(), mode: () => 'minimize', appFor: () => ({ minimized: false, minimize() {}, maximize() {} }) });
+  min.hold(element(), { sticky: true });
+  assert.equal(min.hasPinnedFade(), false, 'a minimized window is not stuck faded');
+});
+
+test('a throwing onChange does not break holding', () => {
+  const quiet = console.error;
+  console.error = () => {};
+  try {
+    const el = element(), ghost = new Ghost({ doc: doc(), onChange: () => { throw new Error('boom'); } });
+    ghost.hold(el, { sticky: true });
+    assert.ok(el.classList.contains(GHOST_CLASS));
+  } finally { console.error = quiet; }
+});

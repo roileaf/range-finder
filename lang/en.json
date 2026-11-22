@@ -20,7 +20,13 @@
       "Label": "Range"
     },
     "Notify": {
-      "NoToken": "Range Finder: this actor has no token on the current scene."
+      "NoToken": "Range Finder: this actor has no token on the current scene.",
+      "FadeHint": "Range Finder: the window fades while a range is shown. Press {key} (or click the chip at the top) to clear the range and bring it back.",
+      "FadeHintNoKey": "Range Finder: the window fades while a range is shown. Click the chip at the top to clear the range and bring it back."
+    },
+    "Chip": {
+      "Label": "Range shown · press {key} or click to clear",
+      "LabelNoKey": "Range shown · click to clear"
     },
     "Controls": {
       "ClearShared": "Range Finder — clear shared ranges"
@@ -77,7 +83,7 @@
         "Name": "Range Finder: hide windows while showing range",
         "Hint": "What happens to the sheet or HUD window a range was shown from.",
         "Choices": {
-          "fade": "Fade (hover to restore)",
+          "fade": "Fade (Esc or the top chip restores)",
           "minimize": "Minimize",
           "off": "Do nothing"
         }

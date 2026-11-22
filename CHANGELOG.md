@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **No more stuck sheets:** while a pinned range keeps a window faded (and click-through), a *Range shown · Esc or click to clear* chip sits at the top of the screen; click it to clear the range and bring the window back. The first time a window fades, a one-time notification also explains it. Esc still works as before.
+
 ## 1.0.2
 
 - **Ranges for every action (PF2e / SF2e):** actions and feats without a built-in range, NPC abilities included, now read it from their description: auras, emanations, cones, lines, bursts, "within 20 feet", "a range of 60 feet", "within its reach" (Attack of Opportunity) and adjacent creatures ("an adjacent creature", "all creatures adjacent to the skink"). The 📏 shows on NPC sheet abilities, the character Actions tab and the PF2e HUD actions sidebar, and the Token HUD list has a new **Actions** group.
